@@ -4,6 +4,8 @@ Star[] willy = new Star[150];
 boolean wPressed = false;
 boolean dPressed = false;
 boolean aPressed = false;
+boolean spacePressed = false;
+ArrayList <Bullet> pew = new ArrayList<Bullet>();
 ArrayList <Asteroid> asteroids = new ArrayList<Asteroid>();
 
 public void setup() {
@@ -34,8 +36,19 @@ public void setup() {
       asteroids.get(i).show();
       asteroids.get(i).move();
       float distance = dist(bob.getX(), bob.getY(), asteroids.get(i).getX(), asteroids.get(i).getY());
-      if (distance <= 20)
+      if (distance <= 20) {
         asteroids.remove(i);
+      }
+      for (int b = 0; b < pew.size(); b++) {
+      pew.get(b).move();
+      pew.get(b).show();
+      float dd = dist((float)pew.get(b).getX(), (float)pew.get(b).getY(), (float)asteroids.get(i).getX(), (float)asteroids.get(i).getY());
+      if (dd < 20) {
+        pew.remove(b);
+        asteroids.remove(i);
+        break;
+      }
+    }
     }
 
     bob.show();
@@ -57,6 +70,9 @@ public void setup() {
       bob.accelerate(0.05);
       bob.turn(3);
     }
+    if (spacePressed) {
+      pew.add(new Bullet (bob));
+    }
   }
 
   public void keyPressed() {
@@ -72,6 +88,9 @@ public void setup() {
     if (key == 'e') {
       bob.hyperspace();
     }
+    if (key == ' ') {
+      spacePressed = true;
+    }
   }
   public void keyReleased() {
     if (key == 'w') {
@@ -82,5 +101,8 @@ public void setup() {
     }
     if (key == 'a') {
       aPressed = false;
+    }
+    if (key == ' ') {
+      spacePressed = false;
     }
   }
